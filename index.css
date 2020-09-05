@@ -1,5 +1,14 @@
-main {
-  display: flex;
-  align-items: center;
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex; 
   justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+canvas {
+  display: block;
 }

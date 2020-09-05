@@ -1,12 +1,83 @@
+let w = 100;
+let columns, rows;
+let stack = [];
+let board = [];
+let current;
+
 function setup() {
-  createCanvas(screen.width * 0.9, screen.height * 0.8);
+  createCanvas(windowWidth, windowHeight);
+
+  columns = floor(width / w);
+  rows = floor(height / w);
+
+  board = createMatrix(columns, rows);
+
+  current = board[0][0];
 }
 
-function draw () {
-  if (mouseIsPressed) {
-    fill(0);
-  } else {
-    fill(255);
+
+
+function draw() {
+  background(54, 54, 54);
+  for (x = 0; x < board.length; x++) {
+    for (y = 0; y < board[x].length; y++) {
+      board[x][y].render();
+    }
   }
-  ellipse(mouseX, mouseY, 80, 80);
+
+  current.visited = true;
+
+  let nextNeighbor = current.nextNeighbor();
+  if (nextNeighbor) {
+    nextNeighbor.visited = true;
+
+    stack.push(current);
+
+    removeWall(current, nextNeighbor);
+
+    current = nextNeighbor;
+  } else if (stack.length > 0) {
+    current = stack.pop();
+  }
+
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+
+function createMatrix(columns, rows) {
+  let spaceX = width / w - columns;
+  let spaceY = height / w - rows;
+  let matrix = [];
+
+  for (let x = 0; x < columns; x++) {
+    let row = [];
+    for (let y = 0; y < rows; y++) {
+      let cell = new Cell(x, y, spaceX, spaceY);
+      row.push(cell);
+    }
+    matrix.push(row);
+  }
+
+  return matrix;
+}
+
+function removeWall(current, next) {
+  let x = current.x - next.x;
+  if (x === 1) {
+    current.walls.left = false;
+    next.walls.right = false;
+  } else if (x === -1) {
+    current.walls.right = false;
+    next.walls.left = false;
+  }
+  let y = current.y - next.y;
+  if (y === 1) {
+    current.walls.top = false;
+    next.walls.bottom = false;
+  } else if (y === -1) {
+    current.walls.bottom = false;
+    next.walls.top = false;
+  }
 }

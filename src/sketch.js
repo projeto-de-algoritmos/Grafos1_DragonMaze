@@ -3,6 +3,9 @@ let columns, rows;
 let stack = [];
 let board = [];
 let current;
+let player;
+let mazeFinished = false;
+let end;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -13,6 +16,9 @@ function setup() {
   board = createMatrix(columns, rows);
 
   current = board[0][0];
+  player = board[0][0];
+  end = board[columns - 1][rows - 1];
+  end.final = true;
 }
 
 
@@ -38,7 +44,38 @@ function draw() {
     current = nextNeighbor;
   } else if (stack.length > 0) {
     current = stack.pop();
+
+    if (current.x === 0 && current.y === 0) {
+      mazeFinished = true;
+    }
   }
+
+  if (mazeFinished) {
+    console.log(player)
+    player.player = true;
+    if (keyIsDown(UP_ARROW)) {
+      if (player.checkCoordinate(player.x, player.y - 1)) {
+        player = board[player.x, player.y - 1];
+      }
+    }
+    if (keyIsDown(DOWN_ARROW)) {
+      if (player.checkCoordinate(player.x, player.y + 1)) {
+        player = board[player.x, player.y + 1];
+      }
+    }
+    if (keyIsDown(LEFT_ARROW)) {
+      if (player.checkCoordinate(player.x - 1, player.y)) {
+        player = board[player.x - 1, player.y];
+      }
+    }
+    if (keyIsDown(RIGHT_ARROW)) {
+      if (player.checkCoordinate(player.x + 1, player.y)) {
+        player = board[player.x + 1, player.y];
+      }
+    }
+    console.log(player);
+  }
+
 
 }
 

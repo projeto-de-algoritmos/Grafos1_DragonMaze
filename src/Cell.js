@@ -14,25 +14,25 @@ class Cell {
       right: true,
       bottom: true,
       left: true,
-    }
+    },
+    this.final = false;
+    this.begin = x === 0 && y === 0 ? true : false;
+    this.player = false;
   }
 
   render() {
     strokeWeight(4);
     stroke(0);
-    if (this.walls.top) {
+    if (this.walls.top && !this.begin) {
       line(this.width, this.height, this.width + w, this.height);
     }
-    if (this.walls.right) {
-
+    if (this.walls.right && !this.final) {
       line(this.width + w, this.height, this.width + w, this.height + w);
     }
-    if (this.walls.bottom) {
-
+    if (this.walls.bottom && !this.final) {
       line(this.width + w, this.height + w, this.width, this.height + w);
     }
-    if (this.walls.left) {
-
+    if (this.walls.left && !this.begin) {
       line(this.width, this.height + w, this.width, this.height);
     }
 
@@ -40,6 +40,12 @@ class Cell {
       noStroke();
       fill(75, 0, 130);
       rect(this.width, this.height, w, w);
+    }
+
+    if (this.player) {
+      noStroke();
+      fill(100);
+      rect(this.width + w * 0.02, this.height + w * 0.02, w * 0.93, w * 0.93);
     }
   }
 
@@ -75,4 +81,5 @@ class Cell {
   checkCoordinate(x, y) {
     return (x < 0 || x > columns - 1 || y < 0 || y > rows - 1) ? false : true;
   }
+
 }

@@ -18,6 +18,7 @@ class Cell {
     this.final = false;
     this.begin = x === 0 && y === 0 ? true : false;
     this.player = false;
+    this.checkCoordinate = this.checkCoordinate;
   }
 
   render() {

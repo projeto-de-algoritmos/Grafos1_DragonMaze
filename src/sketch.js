@@ -3,7 +3,10 @@ let columns, rows;
 let stack = [];
 let board = [];
 let current;
+let x;
+let y;
 let player;
+let direction;
 let mazeFinished = false;
 let end;
 
@@ -14,73 +17,12 @@ function setup() {
   rows = floor(height / w);
 
   board = createMatrix(columns, rows);
-
+  x = 0;
+  y = 0;
   current = board[0][0];
   player = board[0][0];
   end = board[columns - 1][rows - 1];
   end.final = true;
-}
-
-
-
-function draw() {
-  background(54, 54, 54);
-  for (x = 0; x < board.length; x++) {
-    for (y = 0; y < board[x].length; y++) {
-      board[x][y].render();
-    }
-  }
-
-  current.visited = true;
-
-  let nextNeighbor = current.nextNeighbor();
-  if (nextNeighbor) {
-    nextNeighbor.visited = true;
-
-    stack.push(current);
-
-    removeWall(current, nextNeighbor);
-
-    current = nextNeighbor;
-  } else if (stack.length > 0) {
-    current = stack.pop();
-
-    if (current.x === 0 && current.y === 0) {
-      mazeFinished = true;
-    }
-  }
-
-  if (mazeFinished) {
-    console.log(player)
-    player.player = true;
-    if (keyIsDown(UP_ARROW)) {
-      if (player.checkCoordinate(player.x, player.y - 1)) {
-        player = board[player.x, player.y - 1];
-      }
-    }
-    if (keyIsDown(DOWN_ARROW)) {
-      if (player.checkCoordinate(player.x, player.y + 1)) {
-        player = board[player.x, player.y + 1];
-      }
-    }
-    if (keyIsDown(LEFT_ARROW)) {
-      if (player.checkCoordinate(player.x - 1, player.y)) {
-        player = board[player.x - 1, player.y];
-      }
-    }
-    if (keyIsDown(RIGHT_ARROW)) {
-      if (player.checkCoordinate(player.x + 1, player.y)) {
-        player = board[player.x + 1, player.y];
-      }
-    }
-    console.log(player);
-  }
-
-
-}
-
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
 }
 
 function createMatrix(columns, rows) {
@@ -100,6 +42,32 @@ function createMatrix(columns, rows) {
   return matrix;
 }
 
+function draw() {
+    background(54, 54, 54);
+    for (x = 0; x < board.length; x++) {
+      for (y = 0; y < board[x].length; y++) {
+        board[x][y].render();
+      }
+    }
+
+    current.visited = true;
+
+    let nextNeighbor = current.nextNeighbor();
+    if (nextNeighbor) {
+      nextNeighbor.visited = true;
+
+      stack.push(current);
+
+      removeWall(current, nextNeighbor);
+
+      current = nextNeighbor;
+    } else if (stack.length > 0) {
+      current = stack.pop();
+    }
+    player.player = true;
+    updateCoordinates();
+  }
+
 function removeWall(current, next) {
   let x = current.x - next.x;
   if (x === 1) {
@@ -118,3 +86,39 @@ function removeWall(current, next) {
     next.walls.top = false;
   }
 }
+
+function updateCoordinates() {
+  switch (direction) {
+    case 'right':
+        player= board[1][0]
+      break;
+    case 'up':
+      player = board[0][1]
+      break;
+    case 'left':
+      player = board[0][0]
+      break;
+    case 'down':
+      player = board[1][1]
+      break;
+  }
+}
+
+function keyPressed() {
+  if (keyIsDown(UP_ARROW)) {
+    direction = 'up';
+  }
+  else if (keyIsDown(DOWN_ARROW)) {
+    direction = 'down';
+  }
+  else if (keyIsDown(LEFT_ARROW)) {
+    direction = 'left';
+  }
+  else if (keyIsDown(RIGHT_ARROW)) {
+    direction = 'right';
+  }
+}
+
+// function windowResized() {
+//   resizeCanvas(windowWidth, windowHeight);
+// }

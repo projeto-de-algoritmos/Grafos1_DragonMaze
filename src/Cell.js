@@ -38,7 +38,7 @@ class Cell {
 
     if (this.visited) {
       noStroke();
-      fill(75, 0, 130);
+      fill(255, 204, 0);
       rect(this.width, this.height, w, w);
     }
 

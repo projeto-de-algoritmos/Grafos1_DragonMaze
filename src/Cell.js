@@ -21,7 +21,7 @@ class Cell {
   }
 
   render() {
-    strokeWeight(4);
+    strokeWeight(8);
     stroke(0);
     if (this.walls.top && !this.begin) {
       line(this.width, this.height, this.width + w, this.height);
@@ -43,9 +43,14 @@ class Cell {
     }
 
     if (this.player) {
+      image(img, this.width + w * 0.02, this.height + w * 0.02, w * 0.93, w * 0.93);
+    }
+
+    if(this.final){
       noStroke();
-      fill(100);
-      rect(this.width + w * 0.02, this.height + w * 0.02, w * 0.93, w * 0.93);
+      fill(0, 0, 0);
+      textSize(32);
+      text('Saída', this.width+10, this.height+70)
     }
   }
 

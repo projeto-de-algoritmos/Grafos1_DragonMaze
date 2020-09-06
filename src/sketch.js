@@ -9,6 +9,7 @@ let current;
 let player;
 let end;
 let gameFinished = false;
+let img;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -17,7 +18,6 @@ function setup() {
   rows = floor(height / w);
 
   board = createMatrix(columns, rows);
-
   current = board[0][0];
   player = board[0][0];
   end = board[columns - 1][rows - 1];
@@ -39,6 +39,9 @@ function reset() {
   player = '';
   end = '';
   setup()
+}
+function preload(){
+  img = loadImage('assets/character.gif');
 }
 
 function draw() {
@@ -74,6 +77,8 @@ function draw() {
 
   if (mazeFinished) {
     player.player = true;
+    player.img = img;
+    
   }
 
   if (player.x === end.x && player.y === end.y) {

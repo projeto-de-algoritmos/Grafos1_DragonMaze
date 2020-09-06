@@ -1,3 +1,5 @@
+const LASTPHASE = 50;
+const NEXTPHASE = -10;
 let w = 100;
 let columns, rows;
 let stack = [];
@@ -6,6 +8,7 @@ let mazeFinished = false;
 let current;
 let player;
 let end;
+let gameFinished = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -21,11 +24,32 @@ function setup() {
   end.final = true;
 }
 
+
+function reset() {
+  w = w + NEXTPHASE;
+  if (w === LASTPHASE) {
+    gameFinished = true;
+  }
+  columns = [];
+  rows = [];
+  stack = [];
+  board = [];
+  mazeFinished = false;
+  current = '';
+  player = '';
+  end = '';
+  setup()
+}
+
 function draw() {
   background(54, 54, 54);
-  for (x = 0; x < board.length; x++) {
-    for (y = 0; y < board[x].length; y++) {
-      board[x][y].render();
+  if (gameFinished) {
+    text('CONGRATULATIONS', 10, 30);
+  } else {
+    for (x = 0; x < board.length; x++) {
+      for (y = 0; y < board[x].length; y++) {
+        board[x][y].render();
+      }
     }
   }
 
@@ -50,6 +74,10 @@ function draw() {
 
   if (mazeFinished) {
     player.player = true;
+  }
+
+  if (player.x === end.x && player.y === end.y) {
+    reset();
   }
 }
 

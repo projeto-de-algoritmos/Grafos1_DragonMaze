@@ -18,6 +18,7 @@ class Cell {
     this.final = false;
     this.begin = x === 0 && y === 0 ? true : false;
     this.player = false;
+    this.finishPhase = this.finishPhase;
   }
 
   render() {
@@ -38,12 +39,17 @@ class Cell {
 
     if (this.visited) {
       noStroke();
-      fill(255, 204, 0);
+      fill(205, 204, 0);
       rect(this.width, this.height, w, w);
     }
 
     if (this.player) {
       image(img, this.width + w * 0.02, this.height + w * 0.02, w * 0.93, w * 0.93);
+    }
+
+    if(this.finishPhase) {
+      fill(0, 0, 0);
+      rect(this.width, this.height, w, w);
     }
 
     if(this.final){

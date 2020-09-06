@@ -10,6 +10,7 @@ let player;
 let end;
 let gameFinished = false;
 let img;
+let nextPhase;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -19,7 +20,7 @@ function setup() {
 
   board = createMatrix(columns, rows);
   current = board[0][0];
-  player = board[0][0];
+  player = board[columns - 2][rows - 1];
   end = board[columns - 1][rows - 1];
   end.final = true;
 }
@@ -40,6 +41,7 @@ function reset() {
   end = '';
   setup()
 }
+
 function preload(){
   img = loadImage('assets/character.gif');
 }
@@ -47,7 +49,11 @@ function preload(){
 function draw() {
   background(54, 54, 54);
   if (gameFinished) {
-    text('CONGRATULATIONS', 10, 30);
+    textSize(22);
+    text('Parabéns! Você terminou todas as fases!', width / 2, height / 2);
+  } else if (nextPhase) {
+    fill(255,255,255)
+    text('Você finalizou a fase, aperte enter para seguir para a próxima fase', width / 4, height / 2);
   } else {
     for (x = 0; x < board.length; x++) {
       for (y = 0; y < board[x].length; y++) {
@@ -82,7 +88,11 @@ function draw() {
   }
 
   if (player.x === end.x && player.y === end.y) {
-    reset();
+    nextPhase = true;
+    if(keyCode === ENTER){
+      nextPhase = false;
+      reset();
+    }
   }
 }
 

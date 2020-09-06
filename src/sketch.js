@@ -2,9 +2,9 @@ let w = 100;
 let columns, rows;
 let stack = [];
 let board = [];
+let mazeFinished = false;
 let current;
 let player;
-let mazeFinished = false;
 let end;
 
 function setup() {
@@ -20,8 +20,6 @@ function setup() {
   end = board[columns - 1][rows - 1];
   end.final = true;
 }
-
-
 
 function draw() {
   background(54, 54, 54);
@@ -51,32 +49,29 @@ function draw() {
   }
 
   if (mazeFinished) {
-    console.log(player)
     player.player = true;
-    if (keyIsDown(UP_ARROW)) {
-      if (player.checkCoordinate(player.x, player.y - 1)) {
-        player = board[player.x, player.y - 1];
-      }
-    }
-    if (keyIsDown(DOWN_ARROW)) {
-      if (player.checkCoordinate(player.x, player.y + 1)) {
-        player = board[player.x, player.y + 1];
-      }
-    }
-    if (keyIsDown(LEFT_ARROW)) {
-      if (player.checkCoordinate(player.x - 1, player.y)) {
-        player = board[player.x - 1, player.y];
-      }
-    }
-    if (keyIsDown(RIGHT_ARROW)) {
-      if (player.checkCoordinate(player.x + 1, player.y)) {
-        player = board[player.x + 1, player.y];
-      }
-    }
-    console.log(player);
+  }
+}
+
+function keyPressed() {
+  if (!mazeFinished) {
+    return null;
   }
 
-
+  if (keyCode === LEFT_ARROW && player.checkCoordinate(player.x - 1, player.y) && !player.walls.left) {
+    player.player = false;
+    player = board[player.x - 1][player.y];
+  }
+  else if (keyCode === RIGHT_ARROW && player.checkCoordinate(player.x + 1, player.y) && !player.walls.right) {
+    player.player = false;
+    player = board[player.x + 1][player.y];
+  } else if (keyCode === UP_ARROW && player.checkCoordinate(player.x, player.y - 1) && !player.walls.top) {
+    player.player = false;
+    player = board[player.x][player.y - 1];
+  } else if (keyCode === DOWN_ARROW && player.checkCoordinate(player.x, player.y + 1) && !player.walls.bottom) {
+    player.player = false;
+    player = board[player.x][player.y + 1];
+  }
 }
 
 function windowResized() {

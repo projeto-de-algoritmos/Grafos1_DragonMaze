@@ -1,6 +1,7 @@
 class Cell {
 
   constructor(x, y, spaceX, spaceY) {
+    this.id = x + "" + y;
     this.x = x;
     this.y = y;
     this.spaceX = spaceX;
@@ -15,13 +16,16 @@ class Cell {
       bottom: true,
       left: true,
     },
-    this.final = false;
+      this.final = false;
     this.begin = x === 0 && y === 0 ? true : false;
     this.player = false;
+    this.dragon = false;
+    this.dragonVisited = false;
     this.finishPhase = this.finishPhase;
   }
 
   render() {
+    // Render the cell
     strokeWeight(8);
     stroke(0);
     if (this.walls.top && !this.begin) {
@@ -37,30 +41,37 @@ class Cell {
       line(this.width, this.height + w, this.width, this.height);
     }
 
+    // Diferent kind of cells
     if (this.visited) {
-      noStroke();
-      fill(150, 150, 150);
-      rect(this.width, this.height, w, w);
+      if (this.final) {
+        noStroke();
+        fill(170);
+        textSize(32);
+        rect(this.width, this.height, w * 2, w, 5);
+      } else {
+        noStroke();
+        fill(96, 150, 186);
+        rect(this.width, this.height, w, w);
+      }
     }
 
     if (this.player) {
       image(img, this.width + w * 0.02, this.height + w * 0.02, w * 0.93, w * 0.93);
     }
 
-    if(this.finishPhase) {
-      fill(0, 0, 0);
-      rect(this.width, this.height, w, w);
+    if (this.dragon) {
+      image(dragonImg, this.width - w * 0.2, this.height, w + w * 0.3, w);
     }
 
-    if(this.final){
-      noStroke();
+    if (this.finishPhase) {
       fill(0, 0, 0);
-      textSize(32);
-      text('Saída', this.width+10, this.height+70)
+      fill(96, 150, 186);
+      rect(this.width, this.height, w, w);
     }
   }
 
   nextNeighbor() {
+    // Return a random neighbor. this functions is used in DFS to generate the maze
     this.neighbors = [];
     let top = this.checkCoordinate(this.x, this.y - 1) ? board[this.x][this.y - 1] : null;
     let right = this.checkCoordinate(this.x + 1, this.y) ? board[this.x + 1][this.y] : null;
@@ -86,10 +97,40 @@ class Cell {
     } else {
       return undefined;
     }
-
   }
 
+  allNeighbors() {
+    // Return all neighbors. this functions is used in BFS to generate the dragon path
+    this.neighbors = [];
+
+    let top = this.checkCoordinate(this.x, this.y - 1) ? board[this.x][this.y - 1] : null;
+    let right = this.checkCoordinate(this.x + 1, this.y) ? board[this.x + 1][this.y] : null;
+    let bottom = this.checkCoordinate(this.x, this.y + 1) ? board[this.x][this.y + 1] : null;
+    let left = this.checkCoordinate(this.x - 1, this.y) ? board[this.x - 1][this.y] : null;
+
+    if (!this.walls.top && top) {
+      this.neighbors.push(top);
+    }
+    if (!this.walls.right && right) {
+      this.neighbors.push(right);
+    }
+    if (!this.walls.bottom && bottom) {
+      this.neighbors.push(bottom);
+    }
+    if (!this.walls.left && left) {
+      this.neighbors.push(left);
+    }
+
+    if (this.neighbors.length > 0) {
+      return this.neighbors;
+    } else {
+      return undefined;
+    }
+  }
+
+
   checkCoordinate(x, y) {
+    // Check a valid coordinate in the matrix
     return (x < 0 || x > columns - 1 || y < 0 || y > rows - 1) ? false : true;
   }
 

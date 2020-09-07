@@ -10,16 +10,18 @@ let player;
 let end;
 let gameFinished = false;
 let img;
+let nextPhase;
+let instructions;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
   columns = floor(width / w);
   rows = floor(height / w);
-
+  instructions = true;
   board = createMatrix(columns, rows);
   current = board[0][0];
-  player = board[0][0];
+  player = board[columns - 2][rows - 1];
   end = board[columns - 1][rows - 1];
   end.final = true;
 }
@@ -40,14 +42,45 @@ function reset() {
   end = '';
   setup()
 }
-function preload(){
+
+function preload() {
   img = loadImage('assets/character.gif');
+  finishGame = loadImage('assets/treasure.gif');
+  arrowKeys = loadImage('assets/arrow-keys.jpg');
+  dragon = loadImage('assets/dragon.gif');
 }
 
 function draw() {
   background(54, 54, 54);
   if (gameFinished) {
-    text('CONGRATULATIONS', 10, 30);
+    textSize(22);
+    text('Parabéns! Você terminou todas as fases!', width / 2.5, height / 8);
+    image(finishGame, width / 2.4, height / 4);
+  } else if (nextPhase) {
+    fill(255, 255, 255)
+    text('Você finalizou a fase, aperte enter para seguir para a próxima fase', width / 2, height / 2);
+  } else if (instructions) {
+    // dragao
+    // enter
+    // logo
+    // instruções // seta
+    image(dragon, width / 3.5, height / 100);
+    textStyle(BOLD);
+    fill(255,0,0);
+    textSize(80);
+    text('DRAGON MAZE', width/2, height / 1.5);
+    textSize(24);
+    fill(255,255,255);
+    textAlign(CENTER, TOP);
+    text('Press Enter to start the game ...', width / 2, height / 2);
+    textAlign(CENTER, CENTER);
+    text('Stay alive for 5 levels of the maze to get the treasure', width / 3, height / 1.25);
+    text('Press arrow keys to move during the game', width / 3, height / 1.15);
+    image(arrowKeys, width / 1.8, height / 1.3);
+    textAlign(CENTER, BOTTOM);
+    if (keyCode === ENTER) {
+      instructions = false;
+    }
   } else {
     for (x = 0; x < board.length; x++) {
       for (y = 0; y < board[x].length; y++) {
@@ -78,11 +111,15 @@ function draw() {
   if (mazeFinished) {
     player.player = true;
     player.img = img;
-    
+
   }
 
   if (player.x === end.x && player.y === end.y) {
-    reset();
+    nextPhase = true;
+    if (keyCode === ENTER) {
+      nextPhase = false;
+      reset();
+    }
   }
 }
 

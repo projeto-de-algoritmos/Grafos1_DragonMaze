@@ -45,7 +45,9 @@ function reset() {
 
 function preload() {
   img = loadImage('assets/character.gif');
-  finishGame = loadImage('assets/treasure.gif')
+  finishGame = loadImage('assets/treasure.gif');
+  arrowKeys = loadImage('assets/arrow-keys.jpg');
+  dragon = loadImage('assets/dragon.gif');
 }
 
 function draw() {
@@ -58,14 +60,24 @@ function draw() {
     fill(255, 255, 255)
     text('Você finalizou a fase, aperte enter para seguir para a próxima fase', width / 2, height / 2);
   } else if (instructions) {
+    // dragao
+    // enter
+    // logo
+    // instruções // seta
+    image(dragon, width / 3.5, height / 100);
+    textStyle(BOLD);
+    fill(255,0,0);
+    textSize(80);
+    text('DRAGON MAZE', width/2, height / 1.5);
     textSize(24);
     fill(255,255,255);
     textAlign(CENTER, TOP);
-    text('Olá! Fuja do dragão no labirinto durante 5 fases para encontrar o tesouro', width / 2, height / 8);
+    text('Press Enter to start the game ...', width / 2, height / 2);
     textAlign(CENTER, CENTER);
-    text('Pressione as setas do teclado para se movimentar durante o jogo', width / 2, height / 2);
+    text('Stay alive for 5 levels of the maze to get the treasure', width / 3, height / 1.25);
+    text('Press arrow keys to move during the game', width / 3, height / 1.15);
+    image(arrowKeys, width / 1.8, height / 1.3);
     textAlign(CENTER, BOTTOM);
-    text('Para iniciar o jogo pressione Enter', width / 2, height / 1.1);
     if (keyCode === ENTER) {
       instructions = false;
     }

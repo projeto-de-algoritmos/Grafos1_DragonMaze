@@ -1,8 +1,9 @@
+const INITIALPHASE = 100;
 const LASTPHASE = 50;
 const NEXTPHASE = -10;
-const TIMETOUPDATEDRAGONPATH = 5;
+const TIMETOUPDATEDRAGONPATH = 10;
 const TIMETOMOVEDRAGON = 3;
-let w = 100;
+let w = INITIALPHASE;
 let columns, rows;
 let stack = [];
 let board = [];
@@ -19,7 +20,7 @@ let countMoveDragonTime = 3;
 let countUpdateDragonPath = 0;
 let gameOver = false;
 let nextPhase;
-let instructions;
+let instructions = true;
 let dragon;
 let dragonInitImg;
 
@@ -28,22 +29,27 @@ function setup() {
 
   columns = floor(width / w);
   rows = floor(height / w);
-  instructions = true;
   board = createMatrix(columns, rows);
   current = board[0][0];
-  player = board[columns - 2][rows - 1];
+  player = board[0][0];
   end = board[columns - 1][rows - 1];
   end.final = true;
   dragon = board[floor(random() * columns)][floor(random() * rows)];
-  //dragon = player;
   setInterval(timeIt, 1000);
 }
 
 
 function reset() {
-  w = w + NEXTPHASE;
-  if (w === LASTPHASE) {
-    gameFinished = true;
+  if (gameOver || gameFinished) {
+    gameOver = false;
+    gameFinished = false;
+    w = INITIALPHASE;
+    instructions = true;
+  } else {
+    w = w + NEXTPHASE;
+    if (w === LASTPHASE) {
+      gameFinished = true;
+    }
   }
   columns = [];
   rows = [];
@@ -73,28 +79,9 @@ function draw() {
     textSize(22);
     text('Parabéns! Você terminou todas as fases!', width / 2.5, height / 8);
     image(finishGame, width / 2.4, height / 4);
-  } else if (nextPhase) {
-    fill(255, 255, 255)
-    text('Você finalizou a fase, aperte enter para seguir para a próxima fase', width / 2, height / 2);
-  } else if (instructions) {
-    image(dragonInitImg, width / 3.5, height / 100);
-    textStyle(BOLD);
-    fill(255, 0, 0);
-    textSize(80);
-    text('DRAGON MAZE', width / 2, height / 1.5);
-    textSize(24);
-    fill(255, 255, 255);
-    textAlign(CENTER, TOP);
-    text('Press Enter to start the game ...', width / 2, height / 2);
-    textAlign(CENTER, CENTER);
-    text('Stay alive for 5 levels of the maze to get the treasure', width / 3, height / 1.25);
-    text('Press arrow keys to move during the game', width / 3, height / 1.15);
-    image(arrowKeys, width / 1.8, height / 1.3);
-    textAlign(CENTER, BOTTOM);
-    if (keyCode === ENTER) {
-      instructions = false;
-    }
-  } else if (dragon.id === player.id) {
+  }
+  else if (dragon.id === player.id) {
+    gameOver = true;
     image(gameOverImg, width / 4, height / 8);
     textAlign(CENTER, CENTER);
     textSize(width * 0.03);
@@ -104,7 +91,21 @@ function draw() {
     textSize(width * 0.01);
     fill(255);
     text('Press Enter to continue...', width / 2, height * 0.9);
-    gameOver = true;
+  } else if (instructions) {
+    image(dragonInitImg, width * 0.25, 0);
+    textStyle(BOLD);
+    fill(255, 0, 0);
+    textSize(80);
+    text('DRAGON MAZE', width / 2, height / 1.5);
+    textSize(width * 0.015);
+    fill(255, 255, 255);
+    textAlign(CENTER, TOP);
+    text('Press Enter to start the game ...', width / 2, height / 2);
+    textSize(24);
+    textAlign(CENTER, CENTER);
+    text('Stay alive through the 5 levels\n of the maze to escape this challenge\n and conquer the hidden treasure.\n Watch out for the DRAGON! \n Press arrow keys to move during the game', width / 3, height / 1.25);
+    image(arrowKeys, width * 0.6, height * 0.68);
+    textAlign(CENTER, BOTTOM);
   } else {
     for (x = 0; x < board.length; x++) {
       for (y = 0; y < board[x].length; y++) {
@@ -135,21 +136,25 @@ function draw() {
   if (mazeFinished) {
     player.player = true;
     dragon.dragon = true;
-    player.img = img;
     if (countUpdateDragonPath === 0)
       defineDragonRoute();
   }
 
   if (player.id === end.id) {
-    nextPhase = true;
-    if (keyCode === ENTER) {
-      nextPhase = false;
-      reset();
-    }
+    reset();
   }
 }
 
 function keyPressed() {
+  if (keyCode === ENTER) {
+    if (instructions) {
+      instructions = false;
+    }
+    if (gameOver || gameFinished) {
+      reset();
+    }
+
+  }
 
   if (!mazeFinished || gameOver) {
     return null;

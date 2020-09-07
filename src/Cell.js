@@ -41,9 +41,16 @@ class Cell {
     }
 
     if (this.visited) {
-      noStroke();
-      fill(150, 150, 150);
-      rect(this.width, this.height, w, w);
+      if (this.final) {
+        noStroke();
+        fill(170);
+        textSize(32);
+        rect(this.width, this.height, w * 2, w, 5);
+      } else {
+        noStroke();
+        fill(96, 150, 186);
+        rect(this.width, this.height, w, w);
+      }
     }
 
     if (this.player) {
@@ -51,19 +58,13 @@ class Cell {
     }
 
     if (this.dragon) {
-      image(dragonImg, this.width - w * 0.2 , this.height, w + w * 0.3, w);
+      image(dragonImg, this.width - w * 0.2, this.height, w + w * 0.3, w);
     }
 
-    if(this.finishPhase) {
+    if (this.finishPhase) {
       fill(0, 0, 0);
+      fill(96, 150, 186);
       rect(this.width, this.height, w, w);
-    }
-
-    if(this.final){
-      noStroke();
-      fill(0, 0, 0);
-      textSize(32);
-      text('Saída', this.width + 10, this.height + 70)
     }
   }
 

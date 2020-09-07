@@ -60,8 +60,8 @@ function reset() {
   player = '';
   end = '';
   dragonPath = '';
-  countMoveDragonTime = 3;
-  countUpdateDragonPath = 0;
+  countMoveDragonTime = TIMETOMOVEDRAGON;
+  countUpdateDragonPath = TIMETOUPDATEDRAGONPATH;
   setup()
 }
 function preload() {

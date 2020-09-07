@@ -11,7 +11,7 @@ let mazeFinished = false;
 let current;
 let player;
 let end;
-let gameFinished = false;
+let gameFinished = true;
 let img;
 let dragonImg;
 let dragonPath;
@@ -68,7 +68,7 @@ function preload() {
   img = loadImage('assets/character.gif');
   dragonImg = loadImage('assets/dragonWalking.gif');
   gameOverImg = loadImage('assets/gameover.gif');
-  finishGame = loadImage('assets/treasure.gif');
+  finishGame = loadImage('assets/treasure.jpg');
   arrowKeys = loadImage('assets/arrow-keys.jpg');
   dragonInitImg = loadImage('assets/dragon.gif');
 }
@@ -76,9 +76,17 @@ function preload() {
 function draw() {
   background(54, 54, 54);
   if (gameFinished) {
-    textSize(22);
-    text('Parabéns! Você terminou todas as fases!', width / 2.5, height / 8);
-    image(finishGame, width / 2.4, height / 4);
+    textAlign(CENTER, CENTER);
+    textSize(width * 0.02);
+    fill(255);
+    text('Congratulations warrior!', width / 2, height / 8);
+    textSize(width * 0.015);
+    text('You have overcome the beast and passed through the maze, you have reached the legendary treasure!', width * 0.5, height * 0.2);
+    image(finishGame, width * 0.25, height / 4, width * 0.5, height * 0.6);
+    textAlign(CENTER, CENTER);
+    textSize(width * 0.01);
+    fill(255);
+    text('Press Enter to continue...', width / 2, height * 0.9);
   }
   else if (dragon.id === player.id) {
     gameOver = true;
@@ -112,24 +120,24 @@ function draw() {
         board[x][y].render();
       }
     }
-  }
 
-  current.visited = true;
+    current.visited = true;
 
-  let nextNeighbor = current.nextNeighbor();
-  if (nextNeighbor) {
-    nextNeighbor.visited = true;
+    let nextNeighbor = current.nextNeighbor();
+    if (nextNeighbor) {
+      nextNeighbor.visited = true;
 
-    stack.push(current);
+      stack.push(current);
 
-    removeWall(current, nextNeighbor);
+      removeWall(current, nextNeighbor);
 
-    current = nextNeighbor;
-  } else if (stack.length > 0) {
-    current = stack.pop();
+      current = nextNeighbor;
+    } else if (stack.length > 0) {
+      current = stack.pop();
 
-    if (current.id === "00") {
-      mazeFinished = true;
+      if (current.id === "00") {
+        mazeFinished = true;
+      }
     }
   }
 

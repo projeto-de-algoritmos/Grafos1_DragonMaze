@@ -237,7 +237,7 @@ function timeIt() {
     if (countMoveDragonTime > 0) {
       countMoveDragonTime--;
     } else {
-      if (dragonPath.length > 0) {
+      if (dragonPath && dragonPath.length > 0) {
         dragon.dragon = false;
         dragon = dragonPath.shift();
         countMoveDragonTime = TIMETOMOVEDRAGON;

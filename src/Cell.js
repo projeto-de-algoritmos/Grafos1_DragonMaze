@@ -16,7 +16,7 @@ class Cell {
       bottom: true,
       left: true,
     },
-    this.final = false;
+      this.final = false;
     this.begin = x === 0 && y === 0 ? true : false;
     this.player = false;
     this.dragon = false;
@@ -50,14 +50,14 @@ class Cell {
     }
 
     if (this.dragon) {
-      image(dragonImg, this.width + w * 0.02, this.height + w * 0.02, w, w);
+      image(dragonImg, this.width, this.height, w + w * 0.7, w);
     }
 
-    if(this.final){
+    if (this.final) {
       noStroke();
       fill(0, 0, 0);
       textSize(32);
-      text('Saída', this.width+10, this.height+70)
+      text('Saída', this.width + 10, this.height + 70)
     }
   }
 

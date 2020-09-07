@@ -1,9 +1,15 @@
 const INITIALPHASE = 100;
 const LASTPHASE = 50;
 const NEXTPHASE = -10;
+<<<<<<< HEAD
 const TIMETOUPDATEDRAGONPATH = 10;
 const TIMETOMOVEDRAGON = 3;
 let w = INITIALPHASE;
+=======
+const TIMETOUPDATEDRAGONPATH = 5;
+const TIMETOMOVEDRAGON = 3;
+let w = 100;
+>>>>>>> 0d2071c8713436215536d32b25541a7e940390a2
 let columns, rows;
 let stack = [];
 let board = [];
@@ -20,7 +26,11 @@ let countMoveDragonTime = 3;
 let countUpdateDragonPath = 0;
 let gameOver = false;
 let nextPhase;
+<<<<<<< HEAD
 let instructions = true;
+=======
+let instructions;
+>>>>>>> 0d2071c8713436215536d32b25541a7e940390a2
 let dragon;
 let dragonInitImg;
 
@@ -34,7 +44,12 @@ function setup() {
   player = board[0][0];
   end = board[columns - 1][rows - 1];
   end.final = true;
+<<<<<<< HEAD
   dragon = w < INITIALPHASE ? board[floor(random() * columns)][floor(random() * rows)] : null;
+=======
+  dragon = board[floor(random() * columns)][floor(random() * rows)];
+  //dragon = player;
+>>>>>>> 0d2071c8713436215536d32b25541a7e940390a2
   setInterval(timeIt, 1000);
 }
 

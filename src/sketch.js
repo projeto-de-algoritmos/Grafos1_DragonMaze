@@ -14,6 +14,7 @@ let gameFinished = false;
 let img;
 let dragonImg;
 let dragonPath;
+let gameOverImg;
 let countMoveDragonTime = 3;
 let countUpdateDragonPath = 0;
 let gameOver = false;
@@ -56,6 +57,7 @@ function reset() {
 function preload() {
   img = loadImage('assets/character.gif');
   dragonImg = loadImage('assets/dragon.gif');
+  gameOverImg = loadImage('assets/gameover.gif');
 }
 
 function draw() {
@@ -66,10 +68,11 @@ function draw() {
     fill(255);
     text('Congratulatios', width / 2, height / 2);
   } else if (dragon.id === player.id) {
+    image(gameOverImg, width / 4, height / 8);
     textAlign(CENTER, CENTER);
     textSize(width * 0.03);
     fill(255);
-    text('Game over', width / 2, height/4);
+    text('Game over', width / 2, height * 0.8);
     textAlign(CENTER, CENTER);
     textSize(width * 0.01);
     fill(255);

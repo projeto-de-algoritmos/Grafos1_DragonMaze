@@ -1,6 +1,7 @@
 class Cell {
 
   constructor(x, y, spaceX, spaceY) {
+    this.id = x + "" + y;
     this.x = x;
     this.y = y;
     this.spaceX = spaceX;
@@ -18,6 +19,8 @@ class Cell {
     this.final = false;
     this.begin = x === 0 && y === 0 ? true : false;
     this.player = false;
+    this.dragon = false;
+    this.dragonVisited = false;
   }
 
   render() {
@@ -44,6 +47,10 @@ class Cell {
 
     if (this.player) {
       image(img, this.width + w * 0.02, this.height + w * 0.02, w * 0.93, w * 0.93);
+    }
+
+    if (this.dragon) {
+      image(dragonImg, this.width + w * 0.02, this.height + w * 0.02, w, w);
     }
 
     if(this.final){
@@ -80,8 +87,36 @@ class Cell {
     } else {
       return undefined;
     }
-
   }
+
+  allNeighbors() {
+    this.neighbors = [];
+
+    let top = this.checkCoordinate(this.x, this.y - 1) ? board[this.x][this.y - 1] : null;
+    let right = this.checkCoordinate(this.x + 1, this.y) ? board[this.x + 1][this.y] : null;
+    let bottom = this.checkCoordinate(this.x, this.y + 1) ? board[this.x][this.y + 1] : null;
+    let left = this.checkCoordinate(this.x - 1, this.y) ? board[this.x - 1][this.y] : null;
+
+    if (!this.walls.top && top) {
+      this.neighbors.push(top);
+    }
+    if (!this.walls.right && right) {
+      this.neighbors.push(right);
+    }
+    if (!this.walls.bottom && bottom) {
+      this.neighbors.push(bottom);
+    }
+    if (!this.walls.left && left) {
+      this.neighbors.push(left);
+    }
+
+    if (this.neighbors.length > 0) {
+      return this.neighbors;
+    } else {
+      return undefined;
+    }
+  }
+
 
   checkCoordinate(x, y) {
     return (x < 0 || x > columns - 1 || y < 0 || y > rows - 1) ? false : true;

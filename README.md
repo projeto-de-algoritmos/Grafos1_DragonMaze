@@ -21,11 +21,14 @@ Adicione 3 ou mais screenshots do projeto em funcionamento.
 **Framework**: p5.js<br>
 Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
 
+Para rodar o projeto é necessário apenas acessar o link https://projeto-de-algoritmos.github.io/Grafos1_DragonMaze/ e jogar
+
 ## Uso 
-Explique como usar seu projeto caso haja algum passo a passo após o comando de execução.
+
+Para movimentar o personagem, utilize as setas do teclado
 
 ## Outros 
-Quaisquer outras informações sobre seu projeto podem ser descritas abaixo.
+
 
 
 

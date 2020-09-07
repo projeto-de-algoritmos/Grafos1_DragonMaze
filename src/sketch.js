@@ -18,16 +18,20 @@ let gameOverImg;
 let countMoveDragonTime = 3;
 let countUpdateDragonPath = 0;
 let gameOver = false;
+let nextPhase;
+let instructions;
+let dragon;
+let dragonInitImg;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
   columns = floor(width / w);
   rows = floor(height / w);
-
+  instructions = true;
   board = createMatrix(columns, rows);
   current = board[0][0];
-  player = board[0][0];
+  player = board[columns - 2][rows - 1];
   end = board[columns - 1][rows - 1];
   end.final = true;
   dragon = board[floor(random() * columns)][floor(random() * rows)];
@@ -58,15 +62,38 @@ function preload() {
   img = loadImage('assets/character.gif');
   dragonImg = loadImage('assets/dragonWalking.gif');
   gameOverImg = loadImage('assets/gameover.gif');
+  finishGame = loadImage('assets/treasure.gif');
+  arrowKeys = loadImage('assets/arrow-keys.jpg');
+  dragonInitImg = loadImage('assets/dragon.gif');
 }
 
 function draw() {
   background(54, 54, 54);
   if (gameFinished) {
+    textSize(22);
+    text('Parabéns! Você terminou todas as fases!', width / 2.5, height / 8);
+    image(finishGame, width / 2.4, height / 4);
+  } else if (nextPhase) {
+    fill(255, 255, 255)
+    text('Você finalizou a fase, aperte enter para seguir para a próxima fase', width / 2, height / 2);
+  } else if (instructions) {
+    image(dragonInitImg, width / 3.5, height / 100);
+    textStyle(BOLD);
+    fill(255, 0, 0);
+    textSize(80);
+    text('DRAGON MAZE', width / 2, height / 1.5);
+    textSize(24);
+    fill(255, 255, 255);
+    textAlign(CENTER, TOP);
+    text('Press Enter to start the game ...', width / 2, height / 2);
     textAlign(CENTER, CENTER);
-    textSize(width * 0.02);
-    fill(255);
-    text('Congratulatios', width / 2, height / 2);
+    text('Stay alive for 5 levels of the maze to get the treasure', width / 3, height / 1.25);
+    text('Press arrow keys to move during the game', width / 3, height / 1.15);
+    image(arrowKeys, width / 1.8, height / 1.3);
+    textAlign(CENTER, BOTTOM);
+    if (keyCode === ENTER) {
+      instructions = false;
+    }
   } else if (dragon.id === player.id) {
     image(gameOverImg, width / 4, height / 8);
     textAlign(CENTER, CENTER);
@@ -108,13 +135,17 @@ function draw() {
   if (mazeFinished) {
     player.player = true;
     dragon.dragon = true;
+    player.img = img;
     if (countUpdateDragonPath === 0)
       defineDragonRoute();
   }
 
   if (player.id === end.id) {
-    reset();
-
+    nextPhase = true;
+    if (keyCode === ENTER) {
+      nextPhase = false;
+      reset();
+    }
   }
 }
 

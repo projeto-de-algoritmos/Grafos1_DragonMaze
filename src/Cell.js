@@ -21,6 +21,7 @@ class Cell {
     this.player = false;
     this.dragon = false;
     this.dragonVisited = false;
+    this.finishPhase = this.finishPhase;
   }
 
   render() {
@@ -41,7 +42,7 @@ class Cell {
 
     if (this.visited) {
       noStroke();
-      fill(255, 204, 0);
+      fill(150, 150, 150);
       rect(this.width, this.height, w, w);
     }
 
@@ -53,7 +54,12 @@ class Cell {
       image(dragonImg, this.width - w * 0.2 , this.height, w + w * 0.3, w);
     }
 
-    if (this.final) {
+    if(this.finishPhase) {
+      fill(0, 0, 0);
+      rect(this.width, this.height, w, w);
+    }
+
+    if(this.final){
       noStroke();
       fill(0, 0, 0);
       textSize(32);

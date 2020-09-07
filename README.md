@@ -17,7 +17,9 @@
  - O labirinto foi gerado através do algorítmo de DFS e a perseguição do dragão ao jogador foi utilizado o algorítmo de BFS.
 
 ## Screenshots
-Adicione 3 ou mais screenshots do projeto em funcionamento.
+![Imagem tutorial 1](/tutorial/initial-screen.png)
+![Imagem tutorial 2](/tutorial/maze.png)
+![Imagem tutorial 3](/tutorial/gameOver.png)
 
 ## Instalação 
 **Linguagem**: JavaScript<br>

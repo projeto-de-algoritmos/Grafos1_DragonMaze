@@ -1,5 +1,7 @@
 const LASTPHASE = 50;
 const NEXTPHASE = -10;
+const TIMETOUPDATEDRAGONPATH = 5;
+const TIMETOMOVEDRAGON = 3;
 let w = 100;
 let columns, rows;
 let stack = [];
@@ -10,8 +12,16 @@ let player;
 let end;
 let gameFinished = false;
 let img;
+let dragonImg;
+let dragonPath;
+let gameOverImg;
+let countMoveDragonTime = 3;
+let countUpdateDragonPath = 0;
+let gameOver = false;
 let nextPhase;
 let instructions;
+let dragon;
+let dragonInitImg;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -24,6 +34,9 @@ function setup() {
   player = board[columns - 2][rows - 1];
   end = board[columns - 1][rows - 1];
   end.final = true;
+  dragon = board[floor(random() * columns)][floor(random() * rows)];
+  //dragon = player;
+  setInterval(timeIt, 1000);
 }
 
 
@@ -40,14 +53,18 @@ function reset() {
   current = '';
   player = '';
   end = '';
+  dragonPath = '';
+  countMoveDragonTime = 3;
+  countUpdateDragonPath = 0;
   setup()
 }
-
 function preload() {
   img = loadImage('assets/character.gif');
+  dragonImg = loadImage('assets/dragonWalking.gif');
+  gameOverImg = loadImage('assets/gameover.gif');
   finishGame = loadImage('assets/treasure.gif');
   arrowKeys = loadImage('assets/arrow-keys.jpg');
-  dragon = loadImage('assets/dragon.gif');
+  dragonInitImg = loadImage('assets/dragon.gif');
 }
 
 function draw() {
@@ -60,17 +77,13 @@ function draw() {
     fill(255, 255, 255)
     text('Você finalizou a fase, aperte enter para seguir para a próxima fase', width / 2, height / 2);
   } else if (instructions) {
-    // dragao
-    // enter
-    // logo
-    // instruções // seta
-    image(dragon, width / 3.5, height / 100);
+    image(dragonInitImg, width / 3.5, height / 100);
     textStyle(BOLD);
-    fill(255,0,0);
+    fill(255, 0, 0);
     textSize(80);
-    text('DRAGON MAZE', width/2, height / 1.5);
+    text('DRAGON MAZE', width / 2, height / 1.5);
     textSize(24);
-    fill(255,255,255);
+    fill(255, 255, 255);
     textAlign(CENTER, TOP);
     text('Press Enter to start the game ...', width / 2, height / 2);
     textAlign(CENTER, CENTER);
@@ -81,6 +94,17 @@ function draw() {
     if (keyCode === ENTER) {
       instructions = false;
     }
+  } else if (dragon.id === player.id) {
+    image(gameOverImg, width / 4, height / 8);
+    textAlign(CENTER, CENTER);
+    textSize(width * 0.03);
+    fill(255);
+    text('Game over', width / 2, height * 0.8);
+    textAlign(CENTER, CENTER);
+    textSize(width * 0.01);
+    fill(255);
+    text('Press Enter to continue...', width / 2, height * 0.9);
+    gameOver = true;
   } else {
     for (x = 0; x < board.length; x++) {
       for (y = 0; y < board[x].length; y++) {
@@ -103,18 +127,20 @@ function draw() {
   } else if (stack.length > 0) {
     current = stack.pop();
 
-    if (current.x === 0 && current.y === 0) {
+    if (current.id === "00") {
       mazeFinished = true;
     }
   }
 
   if (mazeFinished) {
     player.player = true;
+    dragon.dragon = true;
     player.img = img;
-
+    if (countUpdateDragonPath === 0)
+      defineDragonRoute();
   }
 
-  if (player.x === end.x && player.y === end.y) {
+  if (player.id === end.id) {
     nextPhase = true;
     if (keyCode === ENTER) {
       nextPhase = false;
@@ -124,7 +150,8 @@ function draw() {
 }
 
 function keyPressed() {
-  if (!mazeFinished) {
+
+  if (!mazeFinished || gameOver) {
     return null;
   }
 
@@ -181,5 +208,59 @@ function removeWall(current, next) {
   } else if (y === -1) {
     current.walls.bottom = false;
     next.walls.top = false;
+  }
+}
+
+function defineDragonRoute() {
+  let paths = [];
+  let path = [];
+  path.push(dragon);
+  paths.push([...path]);
+
+  for (x = 0; x < board.length; x++) {
+    for (y = 0; y < board[x].length; y++) {
+      board[x][y].dragonVisited = false;
+    }
+  }
+
+  while (paths.length > 0) {
+    path = paths.shift();
+    let last = path[path.length - 1]
+    if (last.id === player.id) {
+      break;
+    }
+
+    let neighbors = last.allNeighbors();
+
+    for (let i = 0; i < neighbors.length; i++) {
+      if (!neighbors[i].dragonVisited) {
+        neighbors[i].dragonVisited = true;
+        let newPath = [...path];
+        newPath.push(neighbors[i]);
+        paths.push([...newPath]);
+      }
+    }
+  }
+
+  dragonPath = path;
+  dragonPath.shift();
+}
+
+function timeIt() {
+  if (mazeFinished && !gameOver) {
+    if (countMoveDragonTime > 0) {
+      countMoveDragonTime--;
+    } else {
+      if (dragonPath.length > 0) {
+        dragon.dragon = false;
+        dragon = dragonPath.shift();
+        countMoveDragonTime = TIMETOMOVEDRAGON;
+      }
+    }
+    if (countUpdateDragonPath > 0) {
+      countUpdateDragonPath--;
+    } else {
+      countUpdateDragonPath = TIMETOUPDATEDRAGONPATH;
+    }
   }
 }

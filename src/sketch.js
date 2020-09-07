@@ -56,7 +56,7 @@ function reset() {
 }
 function preload() {
   img = loadImage('assets/character.gif');
-  dragonImg = loadImage('assets/dragon.gif');
+  dragonImg = loadImage('assets/dragonWalking.gif');
   gameOverImg = loadImage('assets/gameover.gif');
 }
 

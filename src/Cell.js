@@ -50,7 +50,7 @@ class Cell {
     }
 
     if (this.dragon) {
-      image(dragonImg, this.width, this.height, w + w * 0.7, w);
+      image(dragonImg, this.width - w * 0.2 , this.height, w + w * 0.3, w);
     }
 
     if (this.final) {

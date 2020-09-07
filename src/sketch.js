@@ -11,7 +11,7 @@ let mazeFinished = false;
 let current;
 let player;
 let end;
-let gameFinished = true;
+let gameFinished = false;
 let img;
 let dragonImg;
 let dragonPath;
@@ -34,7 +34,7 @@ function setup() {
   player = board[0][0];
   end = board[columns - 1][rows - 1];
   end.final = true;
-  dragon = board[floor(random() * columns)][floor(random() * rows)];
+  dragon = w < INITIALPHASE ? board[floor(random() * columns)][floor(random() * rows)] : null;
   setInterval(timeIt, 1000);
 }
 
@@ -88,7 +88,7 @@ function draw() {
     fill(255);
     text('Press Enter to continue...', width / 2, height * 0.9);
   }
-  else if (dragon.id === player.id) {
+  else if (dragon && dragon.id === player.id) {
     gameOver = true;
     image(gameOverImg, width / 4, height / 8);
     textAlign(CENTER, CENTER);
@@ -143,9 +143,11 @@ function draw() {
 
   if (mazeFinished) {
     player.player = true;
-    dragon.dragon = true;
-    if (countUpdateDragonPath === 0)
-      defineDragonRoute();
+    if (w < INITIALPHASE) {
+      dragon.dragon = true;
+      if (countUpdateDragonPath === 0)
+        defineDragonRoute();
+    }
   }
 
   if (player.id === end.id) {

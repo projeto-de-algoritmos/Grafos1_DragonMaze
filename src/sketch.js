@@ -44,13 +44,15 @@ function reset() {
 
 function preload(){
   img = loadImage('assets/character.gif');
+  finishGame = loadImage('assets/treasure.gif')
 }
 
 function draw() {
   background(54, 54, 54);
   if (gameFinished) {
     textSize(22);
-    text('Parabéns! Você terminou todas as fases!', width / 2, height / 2);
+    text('Parabéns! Você terminou todas as fases!', width / 1.5, height / 4);
+    image(finishGame, 100, 100)
   } else if (nextPhase) {
     fill(255,255,255)
     text('Você finalizou a fase, aperte enter para seguir para a próxima fase', width / 4, height / 2);

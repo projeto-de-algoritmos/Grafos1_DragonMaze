@@ -25,6 +25,7 @@ class Cell {
   }
 
   render() {
+    // Render the cell
     strokeWeight(8);
     stroke(0);
     if (this.walls.top && !this.begin) {
@@ -40,6 +41,7 @@ class Cell {
       line(this.width, this.height + w, this.width, this.height);
     }
 
+    // Diferent kind of cells
     if (this.visited) {
       if (this.final) {
         noStroke();
@@ -69,6 +71,7 @@ class Cell {
   }
 
   nextNeighbor() {
+    // Return a random neighbor. this functions is used in DFS to generate the maze
     this.neighbors = [];
     let top = this.checkCoordinate(this.x, this.y - 1) ? board[this.x][this.y - 1] : null;
     let right = this.checkCoordinate(this.x + 1, this.y) ? board[this.x + 1][this.y] : null;
@@ -97,6 +100,7 @@ class Cell {
   }
 
   allNeighbors() {
+    // Return all neighbors. this functions is used in BFS to generate the dragon path
     this.neighbors = [];
 
     let top = this.checkCoordinate(this.x, this.y - 1) ? board[this.x][this.y - 1] : null;
@@ -126,6 +130,7 @@ class Cell {
 
 
   checkCoordinate(x, y) {
+    // Check a valid coordinate in the matrix
     return (x < 0 || x > columns - 1 || y < 0 || y > rows - 1) ? false : true;
   }
 

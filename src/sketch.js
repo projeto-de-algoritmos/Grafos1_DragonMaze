@@ -11,13 +11,14 @@ let end;
 let gameFinished = false;
 let img;
 let nextPhase;
+let instructions;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
   columns = floor(width / w);
   rows = floor(height / w);
-
+  instructions = true;
   board = createMatrix(columns, rows);
   current = board[0][0];
   player = board[columns - 2][rows - 1];
@@ -42,7 +43,7 @@ function reset() {
   setup()
 }
 
-function preload(){
+function preload() {
   img = loadImage('assets/character.gif');
   finishGame = loadImage('assets/treasure.gif')
 }
@@ -51,11 +52,23 @@ function draw() {
   background(54, 54, 54);
   if (gameFinished) {
     textSize(22);
-    text('Parabéns! Você terminou todas as fases!', width / 1.5, height / 4);
-    image(finishGame, 100, 100)
+    text('Parabéns! Você terminou todas as fases!', width / 2.5, height / 8);
+    image(finishGame, width / 2.4, height / 4);
   } else if (nextPhase) {
-    fill(255,255,255)
-    text('Você finalizou a fase, aperte enter para seguir para a próxima fase', width / 4, height / 2);
+    fill(255, 255, 255)
+    text('Você finalizou a fase, aperte enter para seguir para a próxima fase', width / 2, height / 2);
+  } else if (instructions) {
+    textSize(24);
+    fill(255,255,255);
+    textAlign(CENTER, TOP);
+    text('Olá! Fuja do dragão no labirinto durante 5 fases para encontrar o tesouro', width / 2, height / 8);
+    textAlign(CENTER, CENTER);
+    text('Pressione as setas do teclado para se movimentar durante o jogo', width / 2, height / 2);
+    textAlign(CENTER, BOTTOM);
+    text('Para iniciar o jogo pressione Enter', width / 2, height / 1.1);
+    if (keyCode === ENTER) {
+      instructions = false;
+    }
   } else {
     for (x = 0; x < board.length; x++) {
       for (y = 0; y < board[x].length; y++) {
@@ -86,12 +99,12 @@ function draw() {
   if (mazeFinished) {
     player.player = true;
     player.img = img;
-    
+
   }
 
   if (player.x === end.x && player.y === end.y) {
     nextPhase = true;
-    if(keyCode === ENTER){
+    if (keyCode === ENTER) {
       nextPhase = false;
       reset();
     }

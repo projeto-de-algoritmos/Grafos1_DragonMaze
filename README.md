@@ -12,7 +12,7 @@
 
 ## Sobre 
 
-  - O jogo consiste em 5 níveis de um labirinto onde o jogador deve ultrapassar sem ser pego pelo guardião do labirinto<br>
+  - O jogo consiste em 5 níveis de um labirinto onde o jogador deve ultrapassar sem ser pego pelo guardião do labirinto.<br>
   
   - O algorítmo usado para gerar o labirinto trata-se de uma busca em profundidade (DFS) onde o nó vizinho é escolhido aleatoriamente.
   
@@ -44,7 +44,10 @@ python -m SimpleHTTPServer
 localhost:8000
 ```
 
-- Caso queira executar o projeto diretamente sem realizar o clone, é necessário apenas acessar o link https://projeto-de-algoritmos.github.io/Grafos1_DragonMaze/ e jogar.
+- Link para o video de demonstrativo [Video](./tutorial/DragonMaze.mp4)
+
+- Caso queira executar o projeto sem realizar o clone, é necessário apenas acessar o link https://projeto-de-algoritmos.github.io/Grafos1_DragonMaze/ e jogar.
+
 
 ## Uso 
 
